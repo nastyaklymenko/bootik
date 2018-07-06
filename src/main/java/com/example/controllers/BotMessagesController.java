@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/messages")
+@RequestMapping(path = "/api/messages/bot")
 public class BotMessagesController {
 
   @Autowired
