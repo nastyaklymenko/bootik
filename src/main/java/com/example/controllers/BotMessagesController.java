@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/messages")
-public class BotMessagesHandler {
+public class BotMessagesController {
 
   @Autowired
   private MicrosoftAppCredentials credentials;
