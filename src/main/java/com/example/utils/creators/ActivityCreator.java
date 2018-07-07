@@ -5,6 +5,7 @@ import com.microsoft.bot.schema.models.Activity;
 import com.microsoft.bot.schema.models.ActivityTypes;
 import com.microsoft.bot.schema.models.Attachment;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,7 +32,11 @@ public class ActivityCreator {
   public static Activity createActivityWithAttachments(Activity activity) {
     List<Attachment> attachments = activity.attachments();
     return createEmptyActivity(activity)
-        .withText(attachments.get(0).contentType())
+        .withText("types of attachments: " +
+            attachments.stream()
+                .map(Attachment::contentType)
+                .collect(Collectors.toList())
+                .toString())
         .withAttachments(attachments);
   }
 

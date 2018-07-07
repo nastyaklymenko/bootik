@@ -1,9 +1,7 @@
 package com.example.controllers;
 
 import static com.example.utils.ActivityUtils.containsAttachments;
-import static com.example.utils.ActivityUtils.getAttachmentsByType;
 
-import com.example.utils.ActivityUtils;
 import com.example.utils.creators.ActivityCreator;
 import com.example.utils.creators.ConversationCreator;
 import com.example.utils.senders.ResourceResponseSender;
@@ -14,7 +12,6 @@ import com.microsoft.bot.connector.Conversations;
 import com.microsoft.bot.connector.customizations.MicrosoftAppCredentials;
 import com.microsoft.bot.connector.implementation.ConnectorClientImpl;
 import com.microsoft.bot.schema.models.Activity;
-import com.microsoft.bot.schema.models.Attachment;
 import com.microsoft.bot.schema.models.ResourceResponse;
 import java.util.List;
 import javax.validation.Valid;
@@ -43,9 +40,8 @@ public class BotMessagesController {
     Conversations conversation = ConversationCreator.createResponseConversation(connector);
 
     if (containsAttachments(activity)) {
-      List<Attachment> attachments = getAttachmentsByType(activity, "image");
       Activity activityWithAttachments =
-          ActivityCreator.createActivityWithAttachments(activity.withAttachments(attachments));
+          ActivityCreator.createActivityWithAttachments(activity);
 
       ResourceResponse responseWithAttachments
           = ResourceResponseSender.send(conversation, activity, activityWithAttachments);
