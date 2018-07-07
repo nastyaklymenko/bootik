@@ -1,8 +1,12 @@
 package com.example.controllers;
 
-import com.example.creators.ActivityCreator;
-import com.example.creators.ConversationCreator;
-import com.example.senders.ResourceResponseSender;
+import static com.example.utils.ActivityUtils.containsAttachments;
+import static com.example.utils.ActivityUtils.getAttachmentsByType;
+
+import com.example.utils.ActivityUtils;
+import com.example.utils.creators.ActivityCreator;
+import com.example.utils.creators.ConversationCreator;
+import com.example.utils.senders.ResourceResponseSender;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
 import com.microsoft.bot.connector.ConnectorClient;
@@ -10,6 +14,7 @@ import com.microsoft.bot.connector.Conversations;
 import com.microsoft.bot.connector.customizations.MicrosoftAppCredentials;
 import com.microsoft.bot.connector.implementation.ConnectorClientImpl;
 import com.microsoft.bot.schema.models.Activity;
+import com.microsoft.bot.schema.models.Attachment;
 import com.microsoft.bot.schema.models.ResourceResponse;
 import java.util.List;
 import javax.validation.Valid;
@@ -35,19 +40,31 @@ public class BotMessagesController {
     ConnectorClient connector =
         new ConnectorClientImpl(activity.serviceUrl(), credentials);
 
-    Activity echoActivity = ActivityCreator.createEchoActivity(activity);
-    Activity checkedActivity = ActivityCreator.createSpellCheckedActivity(activity);
     Conversations conversation = ConversationCreator.createResponseConversation(connector);
 
-    ResourceResponse echoResponse =
-        ResourceResponseSender.send(conversation, activity, echoActivity);
-    responses.add(echoResponse);
+    if (containsAttachments(activity)) {
+      List<Attachment> attachments = getAttachmentsByType(activity, "image");
+      Activity activityWithAttachments =
+          ActivityCreator.createActivityWithAttachments(activity.withAttachments(attachments));
 
-    ResourceResponse spellCheckedResponse =
-        ResourceResponseSender.send(conversation, activity, checkedActivity);
-    responses.add(spellCheckedResponse);
+      ResourceResponse responseWithAttachments
+          = ResourceResponseSender.send(conversation, activity, activityWithAttachments);
 
+      responses.add(responseWithAttachments);
+
+    } else {
+      Activity echoActivity = ActivityCreator.createEchoActivity(activity);
+      Activity checkedActivity = ActivityCreator.createSpellCheckedActivity(activity);
+
+      ResourceResponse echoResponse =
+          ResourceResponseSender.send(conversation, activity, echoActivity);
+      responses.add(echoResponse);
+
+      ResourceResponse spellCheckedResponse =
+          ResourceResponseSender.send(conversation, activity, checkedActivity);
+      responses.add(spellCheckedResponse);
+    }
     return responses;
   }
-
 }
+

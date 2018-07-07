@@ -1,4 +1,4 @@
-package com.example.senders;
+package com.example.utils.senders;
 
 import com.microsoft.bot.connector.Conversations;
 import com.microsoft.bot.schema.models.Activity;

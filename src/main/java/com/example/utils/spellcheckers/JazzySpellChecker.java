@@ -1,4 +1,4 @@
-package com.example.spellcheckers;
+package com.example.utils.spellcheckers;
 
 import com.swabunga.spell.engine.SpellDictionaryHashMap;
 import com.swabunga.spell.engine.Word;
