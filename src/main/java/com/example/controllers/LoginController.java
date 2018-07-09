@@ -2,9 +2,6 @@ package com.example.controllers;
 
 import com.example.model.User;
 import com.example.service.UserService;
-import com.microsoft.bot.connector.customizations.MicrosoftAppCredentials;
-import com.microsoft.bot.schema.models.ResourceResponse;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

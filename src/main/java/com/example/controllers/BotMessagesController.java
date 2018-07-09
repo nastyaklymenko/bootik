@@ -40,27 +40,37 @@ public class BotMessagesController {
     Conversations conversation = ConversationCreator.createResponseConversation(connector);
 
     if (containsAttachments(activity)) {
-      Activity activityWithAttachments =
-          ActivityCreator.createActivityWithAttachments(activity);
-
-      ResourceResponse responseWithAttachments
-          = ResourceResponseSender.send(conversation, activity, activityWithAttachments);
-
-      responses.add(responseWithAttachments);
+      sendMediaActivity(activity, conversation);
 
     } else {
-      Activity echoActivity = ActivityCreator.createEchoActivity(activity);
-      Activity checkedActivity = ActivityCreator.createSpellCheckedActivity(activity);
-
-      ResourceResponse echoResponse =
-          ResourceResponseSender.send(conversation, activity, echoActivity);
-      responses.add(echoResponse);
-
-      ResourceResponse spellCheckedResponse =
-          ResourceResponseSender.send(conversation, activity, checkedActivity);
-      responses.add(spellCheckedResponse);
+      sendTextActivities(activity, conversation);
     }
     return responses;
+  }
+
+  private void sendMediaActivity(Activity activity,
+      Conversations conversation) {
+    Activity activityWithAttachments =
+        ActivityCreator.createActivityWithAttachments(activity);
+
+    ResourceResponse responseWithAttachments
+        = ResourceResponseSender.send(conversation, activity, activityWithAttachments);
+
+    responses.add(responseWithAttachments);
+  }
+
+  private void sendTextActivities(Activity activity,
+      Conversations conversation) {
+    Activity echoActivity = ActivityCreator.createEchoActivity(activity);
+    Activity checkedActivity = ActivityCreator.createSpellCheckedActivity(activity);
+
+    ResourceResponse echoResponse =
+        ResourceResponseSender.send(conversation, activity, echoActivity);
+    responses.add(echoResponse);
+
+    ResourceResponse spellCheckedResponse =
+        ResourceResponseSender.send(conversation, activity, checkedActivity);
+    responses.add(spellCheckedResponse);
   }
 }
 
