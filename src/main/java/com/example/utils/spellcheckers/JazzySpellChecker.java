@@ -1,37 +1,28 @@
 package com.example.utils.spellcheckers;
 
-import com.swabunga.spell.engine.SpellDictionaryHashMap;
+import com.example.config.JazzyConfig;
 import com.swabunga.spell.engine.Word;
 import com.swabunga.spell.event.SpellCheckEvent;
 import com.swabunga.spell.event.SpellCheckListener;
 import com.swabunga.spell.event.SpellChecker;
 import com.swabunga.spell.event.StringWordTokenizer;
 import com.swabunga.spell.event.TeXWordFinder;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component()
 public class JazzySpellChecker implements SpellCheckListener {
 
-  private static SpellDictionaryHashMap dictionaryHashMap;
+  private ApplicationContext context = new AnnotationConfigApplicationContext(JazzyConfig.class);
 
-  static {
-    File dictionary = new File(
-        "src\\main\\resources\\dictionary.txt");
-    try {
-      dictionaryHashMap = new SpellDictionaryHashMap(dictionary);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+  private SpellChecker spellChecker = context.getBean(SpellChecker.class);
 
-  private SpellChecker spellChecker;
-  private List<String> misspelledWords;
+  private List<String> misspelledWords = context.getBean(List.class);
 
   public JazzySpellChecker() {
-    misspelledWords = new ArrayList<>();
-    spellChecker = new SpellChecker(dictionaryHashMap);
     spellChecker.addSpellCheckListener(this);
   }
 
