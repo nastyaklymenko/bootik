@@ -7,12 +7,9 @@ import com.microsoft.bot.schema.models.ActivityTypes;
 import com.microsoft.bot.schema.models.Attachment;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,9 +19,11 @@ public class ActivityCreator {
   private static final String spellCheckedResponsePart = "You have probably meant: ";
   private static final String echoResponsePart = "You typed: ";
 
-  private static ApplicationContext context = new AnnotationConfigApplicationContext(JazzySpellChecker.class);
+  private static ApplicationContext context = new AnnotationConfigApplicationContext(
+      JazzySpellChecker.class);
 
-  private static JazzySpellChecker spellChecker = (JazzySpellChecker) context.getBean(JazzySpellChecker.class);
+  private static JazzySpellChecker spellChecker = (JazzySpellChecker) context
+      .getBean(JazzySpellChecker.class);
 
   private ActivityCreator() {
 
